@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+   $("form").submit(function() {
+      $(this).children(':input[value=""]').attr("disabled", "disabled");
+      return true; // ensure form still submits
+   });
     // "Toggle all" checkbox (table header)
     $('#toggle_all').click(function (event) {
         $('td input:checkbox[name=pk]').prop('checked', $(this).prop('checked'));
