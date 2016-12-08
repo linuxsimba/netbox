@@ -324,7 +324,7 @@ class DeviceTable(BaseTable):
                                     text=lambda record: record.device_type.full_name)
     primary_ip = tables.TemplateColumn(orderable=False, verbose_name='IP Address',
                                        template_code="{{ record.primary_ip.address.ip }}")
-    custom_fields = tables.TemplateColumn(orderable=True, verbose_name='Custom Fields',
+    custom_fields = tables.TemplateColumn(orderable=False, verbose_name='Custom Fields',
                                         template_code=CUSTOM_FIELDS)
 
     class Meta(BaseTable.Meta):

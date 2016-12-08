@@ -102,6 +102,16 @@ TENANT_LINK = """
 {% endif %}
 """
 
+CUSTOM_FIELDS = """
+{% for field,value in record.get_custom_fields.items %}
+   {% if value %}
+     <div><div><strong>{{ field }}</strong></div><div>{{ value }}</div></div>
+   {% else %}
+     %mdash;
+   {% endif %}
+{% endfor %}
+"""
+
 
 #
 # VRFs
@@ -191,14 +201,15 @@ class PrefixTable(BaseTable):
     status = tables.TemplateColumn(STATUS_LABEL, verbose_name='Status')
     prefix = tables.TemplateColumn(PREFIX_LINK, verbose_name='Prefix')
     vrf = tables.TemplateColumn(VRF_LINK, verbose_name='VRF')
-    tenant = tables.TemplateColumn(TENANT_LINK, verbose_name='Tenant')
     site = tables.LinkColumn('dcim:site', args=[Accessor('site.slug')], verbose_name='Site')
     role = tables.Column(verbose_name='Role')
     description = tables.Column(orderable=False, verbose_name='Description')
+    custom_fields = tables.TemplateColumn(orderable=False, verbose_name='Custom Fields',
+                                        template_code=CUSTOM_FIELDS)
 
     class Meta(BaseTable.Meta):
         model = Prefix
-        fields = ('pk', 'prefix', 'status', 'vrf', 'tenant', 'site', 'role', 'description')
+        fields = ('pk', 'prefix', 'status', 'vrf', 'tenant', 'site', 'role', 'description', 'custom_fields')
         row_attrs = {
             'class': lambda record: 'success' if not record.pk else '',
         }
@@ -226,11 +237,12 @@ class IPAddressTable(BaseTable):
     address = tables.TemplateColumn(IPADDRESS_LINK, verbose_name='IP Address')
     status = tables.TemplateColumn(STATUS_LABEL, verbose_name='Status')
     vrf = tables.TemplateColumn(VRF_LINK, verbose_name='VRF')
-    tenant = tables.TemplateColumn(TENANT_LINK, verbose_name='Tenant')
     device = tables.LinkColumn('dcim:device', args=[Accessor('interface.device.pk')], orderable=False,
                                verbose_name='Device')
     interface = tables.Column(orderable=False, verbose_name='Interface')
     description = tables.Column(orderable=False, verbose_name='Description')
+    custom_fields = tables.TemplateColumn(orderable=False, verbose_name='Custom Fields',
+                                        template_code=CUSTOM_FIELDS)
 
     class Meta(BaseTable.Meta):
         model = IPAddress
