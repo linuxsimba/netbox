@@ -75,6 +75,13 @@ UTILIZATION_GRAPH = """
 {% utilization_graph value %}
 """
 
+CUSTOM_FIELDS = """
+{% for field,value in record.get_custom_fields.items %}
+   {% if value %}
+     <div><div><strong>{{ field }}</strong></div><div>{{ value }}</div></div>
+   {% endif %}
+{% endfor %}
+"""
 
 #
 # Sites
@@ -312,12 +319,13 @@ class DeviceTable(BaseTable):
     name = tables.TemplateColumn(template_code=DEVICE_LINK, verbose_name='Name')
     tenant = tables.LinkColumn('tenancy:tenant', args=[Accessor('tenant.slug')], verbose_name='Tenant')
     site = tables.Column(accessor=Accessor('rack.site'), verbose_name='Site')
-    rack = tables.LinkColumn('dcim:rack', args=[Accessor('rack.pk')], verbose_name='Rack')
     device_role = tables.TemplateColumn(DEVICE_ROLE, verbose_name='Role')
     device_type = tables.LinkColumn('dcim:devicetype', args=[Accessor('device_type.pk')], verbose_name='Type',
                                     text=lambda record: record.device_type.full_name)
     primary_ip = tables.TemplateColumn(orderable=False, verbose_name='IP Address',
                                        template_code="{{ record.primary_ip.address.ip }}")
+    custom_fields = tables.TemplateColumn(orderable=True, verbose_name='Custom Fields',
+                                        template_code=CUSTOM_FIELDS)
 
     class Meta(BaseTable.Meta):
         model = Device
