@@ -107,7 +107,7 @@ CUSTOM_FIELDS = """
    {% if value %}
      <div><div><strong>{{ field }}</strong></div><div>{{ value }}</div></div>
    {% else %}
-     %mdash;
+     &mdash;
    {% endif %}
 {% endfor %}
 """

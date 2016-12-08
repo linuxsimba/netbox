@@ -79,6 +79,8 @@ CUSTOM_FIELDS = """
 {% for field,value in record.get_custom_fields.items %}
    {% if value %}
      <div><div><strong>{{ field }}</strong></div><div>{{ value }}</div></div>
+   {% else %}
+     &mdash;
    {% endif %}
 {% endfor %}
 """
